@@ -21,7 +21,6 @@ const config: Config = {
         "income-value": "var(--income-value)",        
         "outcome-value": "var(--outcome-value)",        
         "button" : "var(--button)",
-        "green" : "var(--green)",
       },
     },
   },

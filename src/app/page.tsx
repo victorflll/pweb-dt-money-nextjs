@@ -2,6 +2,7 @@ import Container, {ContainerModel} from "@/components/Container";
 import {Header} from "@/components/Header";
 import TransactionsTable, {TransactionModel} from "@/components/TransactionTable";
 import React from "react";
+import Image from "next/image";
 
 const transactions: TransactionModel[] = [
     {id: 1, title: 'Desenvolvimento de site', price: 12000, categorie: 'Trabalho', date: '13/04/2021'},
@@ -15,7 +16,7 @@ const containers: ContainerModel[] = [
         id: 1,
         title: 'Entradas',
         value: 17400,
-        icon: '/images/input-logo.png',
+        icon: <Image src='/images/input-logo.png' alt="input" width={32} height={32}/>,
         backgroundColor: 'bg-white',
         textColor: 'text-black'
     },
@@ -23,7 +24,7 @@ const containers: ContainerModel[] = [
         id: 2,
         title: 'Saídas',
         value: 1259,
-        icon: '/images/output-logo.png',
+        icon: <Image src='/images/output-logo.png' alt="output" width={32} height={32}/>,
         backgroundColor: 'bg-white',
         textColor: 'text-black'
     },
@@ -31,7 +32,7 @@ const containers: ContainerModel[] = [
         id: 3,
         title: 'Total',
         value: 16141,
-        icon: '/images/total-logo.png',
+        icon: <Image src='/images/total-logo.png' alt="total" width={32} height={32}/>,
         backgroundColor: 'bg-income-value',
         textColor: 'text-white'
     }
@@ -41,7 +42,7 @@ export default function Home() {
     return (
         <>
             <Header/>
-            <div className="mx-auto max-w-[1120px] flex justify-between -mt-24 pt-8">
+            <div className="mx-auto max-w-[1120px] flex justify-between -mt-24 pt-6">
                 {containers.map((container) => (
                     <Container key={container.id} container={container}></Container>
                 ))}
