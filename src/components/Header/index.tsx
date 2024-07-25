@@ -2,9 +2,16 @@
 
 import Image from "next/image";
 import TransactionDialog from "@/components/Dialog";
-import {useState} from "react";
+import {FC, useState} from "react";
+import {CategoryModel} from "@/mocks/categoryModel";
+import {TransactionModel} from "@/mocks/transactionModel";
 
-export function Header() {
+interface HeaderProps {
+    categories: CategoryModel[]
+    handleSubmit: (transaction: TransactionModel) => void;
+}
+
+export const Header: FC<HeaderProps> = ({categories, handleSubmit}) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     return (
@@ -15,7 +22,9 @@ export function Header() {
                     className="bg-button text-white size-4 w-[197px] px-5 py-6 rounded-md text-center flex items-center justify-center hover:opacity-80"
                     onClick={() => setIsDialogOpen(true)}>Nova Transação
                 </button>
-                <TransactionDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} />
+                <TransactionDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)}
+                                   categories={categories} handleSubmit={handleSubmit}/>
             </div>
         </header>)
 }
+

@@ -1,49 +1,66 @@
-import Container, {ContainerModel} from "@/components/Container";
+'use client'
+
+import Container from "@/components/Container";
 import {Header} from "@/components/Header";
-import TransactionsTable, {TransactionModel} from "@/components/TransactionTable";
+import TransactionsTable from "@/components/TransactionTable";
 import React from "react";
-import Image from "next/image";
-
-const transactions: TransactionModel[] = [
-    {id: 1, title: 'Desenvolvimento de site', price: 12000, categorie: 'Trabalho', date: '13/04/2021'},
-    {id: 2, title: 'Hamburguer', price: -59, categorie: 'Alimentação', date: '10/04/2021'},
-    {id: 3, title: 'Aluguel do apartamento', price: -1200, categorie: 'Casa', date: '27/03/2021'},
-    {id: 4, title: 'Computador', price: 5400, categorie: 'Venda', date: '15/03/2021'},
-];
-
-const containers: ContainerModel[] = [
-    {
-        id: 1,
-        title: 'Entradas',
-        value: 17400,
-        icon: <Image src='/images/input-logo.png' alt="input" width={32} height={32}/>,
-        backgroundColor: 'bg-white',
-        textColor: 'text-black'
-    },
-    {
-        id: 2,
-        title: 'Saídas',
-        value: 1259,
-        icon: <Image src='/images/output-logo.png' alt="output" width={32} height={32}/>,
-        backgroundColor: 'bg-white',
-        textColor: 'text-black'
-    },
-    {
-        id: 3,
-        title: 'Total',
-        value: 16141,
-        icon: <Image src='/images/total-logo.png' alt="total" width={32} height={32}/>,
-        backgroundColor: 'bg-income-value',
-        textColor: 'text-white'
-    }
-];
+import {ArrowDownCircleIcon, ArrowUpCircleIcon, CurrencyDollarIcon} from "@heroicons/react/24/outline";
+import {categories} from "@/mocks/categoryModel";
+import {CardType, TransactionModel, transactionsMock} from "@/mocks/transactionModel";
+import {ContainerModel} from "@/mocks/containerModel";
 
 export default function Home() {
+    const [transactions, setTransactions] = React.useState<TransactionModel[]>(transactionsMock);
+
+    const containersMock: ContainerModel[] = [
+        {
+            id: 1,
+            title: 'Entradas',
+            value: transactions.reduce((group, item) => {
+                if (item.type === CardType.credit) {
+                    group += item.price
+                }
+                return group;
+            }, 0),
+            icon: <ArrowUpCircleIcon className="h-8 w-8" color="green"></ArrowUpCircleIcon>,
+            backgroundColor: 'bg-white',
+            textColor: 'text-black'
+        },
+        {
+            id: 2,
+            title: 'Saídas',
+            value: transactions.reduce((group, item) => {
+                if (item.type === CardType.debit) {
+                    group += item.price
+                }
+                return group;
+            }, 0),
+            icon: <ArrowDownCircleIcon className="h-8 w-8" color="red"></ArrowDownCircleIcon>,
+            backgroundColor: 'bg-white',
+            textColor: 'text-black'
+        },
+        {
+            id: 3,
+            title: 'Total',
+            value: transactions.reduce((group, item) => {
+                group += item.price
+                return group;
+            }, 0),
+            icon: <CurrencyDollarIcon className="h-8 w-8" color="white"></CurrencyDollarIcon>,
+            backgroundColor: 'bg-income-value',
+            textColor: 'text-white'
+        }
+    ];
+    
+    const handleSubmit = (entry: TransactionModel) => {
+        setTransactions((prev) => [...prev, entry]);
+    }
+
     return (
         <>
-            <Header/>
+            <Header categories={categories} handleSubmit={handleSubmit}/>
             <div className="mx-auto max-w-[1120px] flex justify-between -mt-24 pt-6">
-                {containers.map((container) => (
+                {containersMock.map((container) => (
                     <Container key={container.id} container={container}></Container>
                 ))}
             </div>

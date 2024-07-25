@@ -1,14 +1,5 @@
-import React, {ReactNode} from 'react';
-import Image from "next/image";
-
-export interface ContainerModel {
-    id: number,
-    icon: ReactNode,
-    title: string,
-    value: number,
-    backgroundColor: string,
-    textColor: string
-}
+import React from 'react';
+import {ContainerModel} from "@/mocks/containerModel";
 
 export interface ContainerProps {
     container: ContainerModel
