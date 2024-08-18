@@ -1,5 +1,6 @@
 import React from 'react';
-import {CardType, TransactionModel} from "@/mocks/transactionModel";
+import {TransactionModel} from "@/mocks/transactionModel";
+import {TransactionType} from "@/mocks/transactionEnums";
 
 export interface TransactionTableProps {
     transactions: TransactionModel[];
@@ -21,13 +22,13 @@ const TransactionsTable: React.FC<TransactionTableProps> = ({transactions}) => {
                 {transactions.map((transaction) => (
                     <tr key={transaction.id}>
                         <td className="px-8 py-4 whitespace-nowrap font-light">{transaction.title}</td>
-                        <td className={`px-8 py-4 whitespace-nowrap font-light ${transaction.type == CardType.debit ? "text-outcome-value before:content-['-']" : 'text-income-value'}`}>
+                        <td className={`px-8 py-4 whitespace-nowrap font-light ${transaction.type == TransactionType.OUTCOME ? "text-outcome-value before:content-['-']" : 'text-income-value'}`}>
                             R$ {transaction.price.toLocaleString('pt-BR', {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2
                         })}
                         </td>
-                        <td className="px-8 py-4 whitespace-nowrap text-gray-400 font-light">{transaction.category?.name}</td>
+                        <td className="px-8 py-4 whitespace-nowrap text-gray-400 font-light">{transaction.category}</td>
                         <td className="px-8 py-4 whitespace-nowrap text-gray-400 font-light">{transaction.date}</td>
                     </tr>
                 ))}

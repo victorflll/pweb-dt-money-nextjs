@@ -5,23 +5,27 @@ import {Dialog, DialogBackdrop, DialogPanel, DialogTitle} from '@headlessui/reac
 import TextField, {TextFieldModel} from "@/components/TextField";
 import {CloseIcon} from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
 import {ArrowDownCircleIcon, ArrowUpCircleIcon} from "@heroicons/react/24/outline";
-import {CategoryModel} from "@/mocks/categoryModel";
-import {CardType, TransactionModel} from "@/mocks/transactionModel";
+import {TransactionCategory, TransactionType} from "@/mocks/transactionEnums";
+import {TransactionDTO} from "@/mocks/transactionModel";
 
 interface TransactionDialogProps {
     isOpen: boolean;
     onClose: () => void;
-    categories: CategoryModel[];
-    handleSubmit: (transaction: TransactionModel) => void;
+    isUpdate: boolean;
 }
 
 const nameField: TextFieldModel = {name: "Nome"}
 const priceField: TextFieldModel = {name: "Preço"}
 
-const TransactionDialog: FC<TransactionDialogProps> = ({isOpen, onClose, categories, handleSubmit}) => {
+const TransactionDialog: FC<TransactionDialogProps> = ({isOpen, onClose, isUpdate = false}) => {
+    const categories = Object.entries(TransactionCategory).map(([key, value]) => ({
+        label: value as string,
+        value: key,
+    }));
+
     const [title, setTitle] = useState<string | "">("");
     const [price, setPrice] = useState<string | "">("");
-    const [type, setType] = useState(CardType.credit);
+    const [type, setType] = useState(TransactionType.ENTRY);
     const [categoryId, setCategoryId] = useState<number | 0>(0);
 
     const handleForm = () => {
@@ -29,25 +33,14 @@ const TransactionDialog: FC<TransactionDialogProps> = ({isOpen, onClose, categor
             return;
         }
 
-        let transaction: TransactionModel = {
-            id: 5,
+        let transaction: TransactionDTO = {
             title: title,
-            price: Number(price),
-            type: type,
-            category: {
-                id: categoryId,
-                name: categories.reduce((group, item) => {
-                    if (categoryId === item.id) {
-                        return item.name
-                    }
-                    return group;
-                }, "")
-            },
-            date: new Date().toLocaleString('pt-BR').split(',')[0],
+            price: type === TransactionType.ENTRY ? Number(price) : Number(price) * -1,
+            category: TransactionCategory.FOOD,
         }
 
         console.log(transaction);
-        handleSubmit(transaction);
+        //handleSubmit(transaction);
         clear();
         onClose();
     };
@@ -87,41 +80,41 @@ const TransactionDialog: FC<TransactionDialogProps> = ({isOpen, onClose, categor
                                            onChange={(event) => setPrice(event.target.value)}></TextField>
                                 <div className="flex items-center justify-between gap-1.5">
                                     <div
-                                        className={`bg-gray-200/40 py-4 mt-1 flex justify-center items-center w-full border border-gray-200 rounded-md shadow-sm px-4 ${type === CardType.credit ? "bg-income-value" : 'bg-gray-200/40'}`}>
+                                        className={`bg-gray-200/40 py-4 mt-1 flex justify-center items-center w-full border border-gray-200 rounded-md shadow-sm px-4 ${type === TransactionType.ENTRY ? "bg-income-value" : 'bg-gray-200/40'}`}>
                                         <input
                                             type="radio"
                                             id="entrada"
                                             name="transactionType"
                                             className="mr-2"
                                             hidden
-                                            checked={type === CardType.credit}
-                                            onChange={() => setType(CardType.credit)}
+                                            checked={type === TransactionType.ENTRY}
+                                            onChange={() => setType(TransactionType.ENTRY)}
                                         />
                                         <div className="flex items-center justify-between gap-1.5">
                                             <ArrowUpCircleIcon className="h-6 w-6"
-                                                               color={`${type === CardType.credit ? "white" : 'green'}`}></ArrowUpCircleIcon>
+                                                               color={`${type === TransactionType.ENTRY ? "white" : 'green'}`}></ArrowUpCircleIcon>
                                             <label htmlFor="entrada"
-                                                   className={`mr-4 ${type === CardType.credit ? "text-white" : 'text-green'}`}>
+                                                   className={`mr-4 ${type === TransactionType.ENTRY ? "text-white" : 'text-green'}`}>
                                                 Entrada
                                             </label>
                                         </div>
                                     </div>
                                     <div
-                                        className={`bg-gray-200/40 py-4 mt-1 flex justify-center items-center w-full border border-gray-200 rounded-md shadow-sm px-4 ${type === CardType.debit ? "bg-outcome-value" : 'bg-gray-200/40'}`}>
+                                        className={`bg-gray-200/40 py-4 mt-1 flex justify-center items-center w-full border border-gray-200 rounded-md shadow-sm px-4 ${type === TransactionType.OUTCOME ? "bg-outcome-value" : 'bg-gray-200/40'}`}>
                                         <input
                                             type="radio"
                                             id="saida"
                                             name="transactionType"
                                             className="mr-2"
                                             hidden
-                                            checked={type === CardType.debit}
-                                            onChange={() => setType(CardType.debit)}
+                                            checked={type === TransactionType.OUTCOME}
+                                            onChange={() => setType(TransactionType.OUTCOME)}
                                         />
                                         <div className="flex items-center justify-between gap-1.5">
                                             <ArrowDownCircleIcon className="h-6 w-6"
-                                                                 color={`${type === CardType.debit ? "white" : 'red'}`}></ArrowDownCircleIcon>
+                                                                 color={`${type === TransactionType.OUTCOME ? "white" : 'red'}`}></ArrowDownCircleIcon>
                                             <label htmlFor="saida"
-                                                   className={`mr-4 ${type === CardType.debit ? "text-white" : 'text-red'}`}>
+                                                   className={`mr-4 ${type === TransactionType.OUTCOME ? "text-white" : 'text-red'}`}>
                                                 Saída
                                             </label>
                                         </div>
@@ -132,7 +125,7 @@ const TransactionDialog: FC<TransactionDialogProps> = ({isOpen, onClose, categor
                                     className="bg-gray-200/40 py-4 appearance-none mt-1 block w-full border border-gray-200 rounded-md shadow-sm px-4 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                     <option disabled selected>Categorias</option>
                                     {categories.map(value => (
-                                        <option key={value.id} value={value.id}>{value.name}</option>
+                                        <option key={value.value} value={value.value}>{value.label}</option>
                                     ))}
                                 </select>
                             </div>

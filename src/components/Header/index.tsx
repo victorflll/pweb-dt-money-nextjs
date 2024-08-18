@@ -3,15 +3,13 @@
 import Image from "next/image";
 import TransactionDialog from "@/components/Dialog";
 import {FC, useState} from "react";
-import {CategoryModel} from "@/mocks/categoryModel";
-import {TransactionModel} from "@/mocks/transactionModel";
+import {TransactionDTO} from "@/mocks/transactionModel";
 
 interface HeaderProps {
-    categories: CategoryModel[]
-    handleSubmit: (transaction: TransactionModel) => void;
+    isUpdate: boolean;
 }
 
-export const Header: FC<HeaderProps> = ({categories, handleSubmit}) => {
+export const Header: FC<HeaderProps> = ({isUpdate = false}) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     return (
@@ -23,7 +21,7 @@ export const Header: FC<HeaderProps> = ({categories, handleSubmit}) => {
                     onClick={() => setIsDialogOpen(true)}>Nova Transação
                 </button>
                 <TransactionDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)}
-                                   categories={categories} handleSubmit={handleSubmit}/>
+                                   isUpdate={isUpdate}/>
             </div>
         </header>)
 }
