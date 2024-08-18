@@ -5,12 +5,12 @@ import {Header} from "@/components/Header";
 import TransactionsTable from "@/components/TransactionTable";
 import React from "react";
 import {ArrowDownCircleIcon, ArrowUpCircleIcon, CurrencyDollarIcon} from "@heroicons/react/24/outline";
-import {ContainerModel} from "@/mocks/containerModel";
-import {DashboardModel, TransactionModel} from "@/mocks/transactionModel";
+import {ContainerModel} from "@/models/containerModel";
+import {useTransaction} from "@/hooks/useTransaction";
 
 export default function Home() {
-    const [dashboard, setDashboard] = React.useState<DashboardModel>();
-    const [transactions, setTransactions] = React.useState<TransactionModel[]>([]);
+    const {data: transactions} = useTransaction.Get()
+    const {data: dashboard} = useTransaction.GetDashboard()
 
     const containersMock: ContainerModel[] = [
         {
@@ -44,7 +44,7 @@ export default function Home() {
                     <Container key={index} container={container}></Container>
                 ))}
             </div>
-            <TransactionsTable transactions={transactions}/>
+            <TransactionsTable transactions={transactions ?? []}/>
             <div className="mb-16"></div>
         </>
     );

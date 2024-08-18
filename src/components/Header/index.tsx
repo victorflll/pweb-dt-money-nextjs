@@ -3,7 +3,7 @@
 import Image from "next/image";
 import TransactionDialog from "@/components/Dialog";
 import {FC, useState} from "react";
-import {TransactionDTO} from "@/mocks/transactionModel";
+import {TransactionDTO} from "@/models/transactionModel";
 
 interface HeaderProps {
     isUpdate: boolean;

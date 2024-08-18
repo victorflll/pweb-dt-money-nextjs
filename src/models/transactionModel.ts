@@ -1,4 +1,4 @@
-﻿import {TransactionCategory, TransactionType} from "@/mocks/transactionEnums";
+﻿import {TransactionCategory, TransactionType} from "@/models/transactionEnums";
 
 
 export interface TransactionModel {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {ContainerModel} from "@/mocks/containerModel";
+import {ContainerModel} from "@/models/containerModel";
 
 export interface ContainerProps {
     container: ContainerModel

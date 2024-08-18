@@ -5,8 +5,9 @@ import {Dialog, DialogBackdrop, DialogPanel, DialogTitle} from '@headlessui/reac
 import TextField, {TextFieldModel} from "@/components/TextField";
 import {CloseIcon} from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
 import {ArrowDownCircleIcon, ArrowUpCircleIcon} from "@heroicons/react/24/outline";
-import {TransactionCategory, TransactionType} from "@/mocks/transactionEnums";
-import {TransactionDTO} from "@/mocks/transactionModel";
+import {TransactionCategory, TransactionType} from "@/models/transactionEnums";
+import {TransactionDTO} from "@/models/transactionModel";
+import {useTransaction} from "@/hooks/useTransaction";
 
 interface TransactionDialogProps {
     isOpen: boolean;
@@ -26,21 +27,19 @@ const TransactionDialog: FC<TransactionDialogProps> = ({isOpen, onClose, isUpdat
     const [title, setTitle] = useState<string | "">("");
     const [price, setPrice] = useState<string | "">("");
     const [type, setType] = useState(TransactionType.ENTRY);
-    const [categoryId, setCategoryId] = useState<number | 0>(0);
+    const [categoryId, setCategoryId] = useState<string | null>(null);
 
     const handleForm = () => {
-        if (categoryId == 0) {
+        if (categoryId == null) {
             return;
         }
 
         let transaction: TransactionDTO = {
             title: title,
             price: type === TransactionType.ENTRY ? Number(price) : Number(price) * -1,
-            category: TransactionCategory.FOOD,
+            category: TransactionCategory[categoryId as keyof typeof TransactionCategory],
         }
 
-        console.log(transaction);
-        //handleSubmit(transaction);
         clear();
         onClose();
     };
@@ -48,7 +47,7 @@ const TransactionDialog: FC<TransactionDialogProps> = ({isOpen, onClose, isUpdat
     const clear = () => {
         setTitle("");
         setPrice("");
-        setCategoryId(0);
+        setCategoryId(null);
     }
 
     return (
@@ -121,7 +120,7 @@ const TransactionDialog: FC<TransactionDialogProps> = ({isOpen, onClose, isUpdat
                                     </div>
                                 </div>
                                 <select
-                                    onChange={(event) => setCategoryId(Number(event.target.value))}
+                                    onChange={(event) => setCategoryId(event.target.value)}
                                     className="bg-gray-200/40 py-4 appearance-none mt-1 block w-full border border-gray-200 rounded-md shadow-sm px-4 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                     <option disabled selected>Categorias</option>
                                     {categories.map(value => (
