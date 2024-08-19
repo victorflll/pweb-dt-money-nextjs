@@ -3,16 +3,17 @@
 import Container from "@/components/Container";
 import {Header} from "@/components/Header";
 import TransactionsTable from "@/components/TransactionTable";
-import React from "react";
+import React, {useState} from "react";
 import {ArrowDownCircleIcon, ArrowUpCircleIcon, CurrencyDollarIcon} from "@heroicons/react/24/outline";
 import {ContainerModel} from "@/models/containerModel";
 import {useTransaction} from "@/hooks/useTransaction";
+import {DashboardModel} from "@/models/transactionModel";
 
 export default function Home() {
     const {data: transactions} = useTransaction.Get()
     const {data: dashboard} = useTransaction.GetDashboard()
 
-    const containersMock: ContainerModel[] = [
+    const containers: ContainerModel[] = [
         {
             title: 'Entradas',
             value: dashboard?.entry ?? 0,
@@ -40,7 +41,7 @@ export default function Home() {
         <>
             <Header isUpdate={false}/>
             <div className="mx-auto max-w-[1120px] flex justify-between -mt-24 pt-6">
-                {containersMock.map((container, index) => (
+                {containers.map((container, index) => (
                     <Container key={index} container={container}></Container>
                 ))}
             </div>

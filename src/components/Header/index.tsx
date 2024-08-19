@@ -21,7 +21,7 @@ export const Header: FC<HeaderProps> = ({isUpdate = false}) => {
                     onClick={() => setIsDialogOpen(true)}>Nova Transação
                 </button>
                 <TransactionDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)}
-                                   isUpdate={isUpdate}/>
+                                   transactionId={null}/>
             </div>
         </header>)
 }

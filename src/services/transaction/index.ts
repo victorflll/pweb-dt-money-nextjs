@@ -13,9 +13,7 @@ export class ApiTransaction {
     }
 
     getDashboard = async (): Promise<DashboardModel> => {
-        console.log("aqui")
         const {data} = await api.get<DashboardModel>(`${this.endpoint}/dashboard/`)
-        console.log(data)
         return data
     }
 
@@ -24,10 +22,9 @@ export class ApiTransaction {
         return data
     }
 
-    getById = async (id: string): Promise<TransactionModel> => {
-        if (id === '0' || id === '') {
-            const A = {} as TransactionModel
-            return A
+    getById = async (id: string): Promise<TransactionModel | null> => {
+        if (id === '') {
+            return null;
         }
         const {data} = await api.get<TransactionModel>(`${this.endpoint}/${id}`)
         return data

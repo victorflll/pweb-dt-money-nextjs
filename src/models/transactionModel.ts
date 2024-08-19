@@ -1,8 +1,5 @@
-﻿import {TransactionCategory, TransactionType} from "@/models/transactionEnums";
-
-
-export interface TransactionModel {
-    id: number,
+﻿export interface TransactionModel {
+    id: string,
     title: string,
     price: number,
     category: string,
@@ -15,7 +12,7 @@ export interface TransactionModel {
 export interface TransactionDTO {
     title: string,
     price: number,
-    category: TransactionCategory,
+    category: number,
 }
 
 export interface DashboardModel {
