@@ -4,6 +4,7 @@ import {TransactionType} from "@/models/transactionEnums";
 import {ArrowUpCircleIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
 import TransactionDialog from "@/components/Dialog";
 import {useTransaction} from "@/hooks/useTransaction";
+import TransactionDeleteDialog from "@/components/Dialog/DeleteDialog";
 
 export interface TransactionTableProps {
     transactions: TransactionModel[];
@@ -11,6 +12,7 @@ export interface TransactionTableProps {
 
 const TransactionsTable: React.FC<TransactionTableProps> = ({transactions}) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [transactionId, setTransactionId] = useState<string>("");
     const deleteTransaction = useTransaction.Delete();
 
@@ -20,7 +22,8 @@ const TransactionsTable: React.FC<TransactionTableProps> = ({transactions}) => {
     }
 
     const handleDelete = (id: string) => {
-        deleteTransaction.mutate(id)
+        setTransactionId(id);
+        setIsDeleteDialogOpen(true);
     };
 
     return (
@@ -62,6 +65,7 @@ const TransactionsTable: React.FC<TransactionTableProps> = ({transactions}) => {
                 </tbody>
             </table>
             <TransactionDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} transactionId={transactionId}/>
+            <TransactionDeleteDialog isOpen={isDeleteDialogOpen} onClose={() => setIsDeleteDialogOpen(false)} transactionId={transactionId}/>
         </div>
     );
 };
