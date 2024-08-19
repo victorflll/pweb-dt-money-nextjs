@@ -50,12 +50,10 @@ const TransactionsTable: React.FC<TransactionTableProps> = ({transactions}) => {
                         </td>
                         <td className="px-8 py-4 whitespace-nowrap text-gray-400 font-light">{transaction.category}</td>
                         <td className="px-8 py-4 whitespace-nowrap text-gray-400 font-light">{new Date(transaction.date).toLocaleString('pt-BR')}</td>
-                        <td className="px-8 py-4 items-center justify-center">
+                        <td className="px-8 py-4 flex items-center justify-center gap-4">
                             <button onClick={() => handleUpdate(transaction.id)}>
                                 <PencilSquareIcon className="h-6 w-6" color="grey"></PencilSquareIcon>
                             </button>
-                        </td>
-                        <td className="px-8 py-4 items-center justify-center">
                             <button onClick={() => handleDelete(transaction.id)}>
                                 <TrashIcon className="h-6 w-6" color="grey"></TrashIcon>
                             </button>
